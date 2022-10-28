@@ -40,7 +40,7 @@
 
 7. 详细窗口中的请求网址就是登录地址，向下滑动，找到请求标头，依次输入（代码29行处）*Host*、*Origin*、*Referer*的值
 
-   ![image-20221029001600202](C:/Users/duguai/AppData/Roaming/Typora/typora-user-images/image-20221029001600202.png)
+![image-202210290038154](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/202210290038154.png)
 
 ![image-20221029000439120](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/202210290004015.png)
 
