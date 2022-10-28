@@ -1,37 +1,92 @@
-# SGU-labor-class
-
-#### 介绍
-韶关学院劳动课提醒脚本
-
-#### 软件架构
-软件架构说明
+# SGU-劳动课
 
 
-#### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+### 严肃警告
 
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+**本脚本纯属个人学习交流使用，不允许任何人/单位使用此脚本非法收集信息以及非法获利**
 
 
-#### 特技
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+### 功能介绍
+
+1. 本脚本用于爬取微课程中的劳动课数据，当有新的劳动课发布时，通过息知的推送服务向微信推送消息
+2. 脚本会进行数据过滤，报名结束时间大于当前时间、用户可报名，可报名人数大于0，满足三个条件才会推送
+3. 本脚本具有去重功能，既每个劳动课消息只会推送一次
+
+### 关于
+
+
+
+#### 运行环境
+
+**Python3**，并安装以下依赖
+
+![image-20221029001819885](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/202210290018708.png)
+
+#### 获取登录地址
+
+1. 电脑打开企业微信，进入微课程，在`我的`中，点击解绑
+
+2. 点击右上角三个点，选择`在浏览器中打开`
+
+3. 去除网址中端口号尾部的内容，回车
+
+4. 键盘按F12键，打开控制台
+
+5. 输入一个错误的账号密码，点击登录
+
+6. 找到带有`login`的地方，鼠标点击，展示出详细窗口
+
+7. 详细窗口中的请求网址就是登录地址，向下滑动，找到请求标头，依次输入（代码29行处）*Host*、*Origin*、*Referer*的值
+
+   ![image-20221029001600202](C:/Users/duguai/AppData/Roaming/Typora/typora-user-images/image-20221029001600202.png)
+
+![image-20221029000439120](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/202210290004015.png)
+
+
+
+#### 获取数据URL
+
+1. 登录成功后，点击劳动课报名，打开控制台
+
+2. 找到带有`list`的地方，鼠标点击，展示出详细窗口
+
+3. 详细窗口中的请求网址就是所需地址，复制然后自行填入
+
+   ![image-20221029001047781](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/202210290010728.png)
+
+4. 向下滑动，找到请求标头，依次输入（代码62行处）*Host*、*Origin*、*Referer*的值
+
+
+
+
+
+#### 账号密码
+
+![image-20221028185324041](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/image-20221028185324041.png)
+
+
+1. **userNo**代表`账号`
+2. **pwd**代表`密码`
+
+#### 息知订阅链接
+
+1. 息知官网 <https://xz.qqoq.net/>
+
+2. 进行官网后扫码登录
+
+3. 进行这个界面，复制链接
+
+   ![image-20221028190312568](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/image-20221028190312568.png)
+
+
+4. 把复制的链接填入
+
+   ![image-20221028190511096](https://lizbeth-9421-1306701624.cos.ap-guangzhou.myqcloud.com/markdown/image-20221028190511096.png)
+
+
+### 运行
+**直接运行就好**，有服务器可以自行挂载到服务器定时运行脚本  
+***cron***表达式 `*/10 8-17 * * *` 每天8点至17点时间段，每十分钟运行一次脚本
+
