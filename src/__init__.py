@@ -145,6 +145,8 @@ def initMessage(msgCollection):
         Qstart = item.get('Qstart')
         # 签到结束时间
         Qend = item.get('Qend')
+        # 唯一标志
+        uniqueFlag = item.get('uniqueFlag')
 
         # 推送标题
         msgTitle = title + " 可报名人数： " + remainNum
@@ -153,8 +155,9 @@ def initMessage(msgCollection):
         # msgContent = "授课老师：" + teacher + "\n" + "总人数：" + nums + "\n" \
         #              + "地点：" + location + "\n" + "报名时间:" + Astart + "-" + Aend + "\n" \
         #              + "签到时间：" + Qstart + "-" + Qend
-        msgContent = "授课老师:{}\n总人数:{}\n地点:{}\n报名时间:{}-{}\n签到时间:{}-{}".format(teacher, nums, location, Astart, Aend,
-                                                                             Qstart, Qend)
+        msgContent = "授课老师:{}\n总人数:{}\n地点:{}\n报名时间:{}-{}\n签到时间:{}-{}\n课程号={}".format(teacher, nums, location, Astart,
+                                                                                     Aend,
+                                                                                     Qstart, Qend, uniqueFlag)
         messages.append({"msgTitle": msgTitle, "msgContent": msgContent})
     return messages
 
