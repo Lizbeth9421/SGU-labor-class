@@ -1,3 +1,4 @@
+# coding=<encoding name> ： # coding=utf-8
 import random
 import pytz
 import requests
@@ -13,58 +14,58 @@ logging.basicConfig(
     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s', level=logging.DEBUG, handlers={
         file_handler})
 
+# reload(sys)
+# sys.setdefaultencoding('utf8')
 # 最新的劳动课时间
 gl_lastTime = datetime.fromtimestamp(int(time.time()))
 logging.info(gl_lastTime)
 logging.info("运行脚本")
 token = ''
 # 请求头
-header = {
-    'Connection': 'keep-alive',
-    "Accept": "application/json,text/plain,*/*",
-    "Accept-Encoding": "gzip, deflate",
-    "Accept-Language": "zh-CN,zh;q=0.9,ko;q=0.8,en;q=0.7",
-    "Cache-Control": "no-cache",
-    "Content-Length": "0",
-    # 下面内容自行补充
-    "Host": "",
-    "Origin": "",
-    "Referer": "",
-    "Pragma": "no-cache",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36",
-}
-# 用户账号密码(自行补充)
+header = {'Connection': 'keep-alive',
+          "Accept": "application/json,text/plain,*/*",
+          "Accept-Encoding": "gzip, deflate",
+          "Accept-Language": "zh-CN,zh;q=0.9,ko;q=0.8,en;q=0.7",
+          "Cache-Control": "no-cache",
+          "Content-Length": "0",
+          "Host": "jwc.sgu.edu.cn:8001",
+          "Origin": "http://jwc.sgu.edu.cn:8001",
+          "Pragma": "no-cache",
+          "Referer": "http://jwc.sgu.edu.cn:8001/",
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36",
+          "token": token
+          }
+# 用户账号密码
 userInfos = [
-    {"userNo": "", "pwd": ""}
+    {"userNo": "20125014011", "pwd": "MzX13723508913*"},
 ]
 
 
 def auth():
-    # 登陆地址
-    target_url = ''
+    target_url = 'http://jwc.sgu.edu.cn:8001/bzb_njwhd/login'
     response = requests.get(target_url, params=random.choice(userInfos), headers=header)
     jsonText = json.loads(response.text).get('data')
+    # print(jsonText)
     global token
     token = jsonText.get('token')
+    # print(token)
     logging.info("身份认证成功")
 
 
 def initData():
     try:
         global token
-        # 获取数据的url
-        target_url = ''
+        target_url = 'http://jwc.sgu.edu.cn:8001/bzb_njwhd/student/ldkxk_list?type=0'
         headerForInitData = {'Connection': 'keep-alive',
                              "Accept": "application/json,text/plain,*/*",
                              "Accept-Encoding": "gzip, deflate",
                              "Accept-Language": "zh-CN,zh;q=0.9,ko;q=0.8,en;q=0.7",
                              "Cache-Control": "no-cache",
                              "Content-Length": "0",
-                             # 下面内容自行补充
-                             "Host": "",
-                             "Origin": "",
-                             "Referer": "",
+                             "Host": "jwc.sgu.edu.cn:8001",
+                             "Origin": "http://jwc.sgu.edu.cn:8001",
                              "Pragma": "no-cache",
+                             "Referer": "http://jwc.sgu.edu.cn:8001/",
                              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36",
                              "token": token
                              }
@@ -98,6 +99,7 @@ def initData():
             # 唯一标识
             uniqueFlag = item.get('jx0404id')
             global gl_lastTime
+            # print(type(parser.parse(Astart)))
             if parser.parse(Aend) > gl_lastTime and canSignUp == "0" and int(remainNum) > 0:
                 # 更新最新时间
                 gl_lastTime = parser.parse(Astart)
@@ -145,20 +147,15 @@ def initMessage(msgCollection):
         Qstart = item.get('Qstart')
         # 签到结束时间
         Qend = item.get('Qend')
-        # 唯一标志
-        uniqueFlag = item.get('uniqueFlag')
 
         # 推送标题
         msgTitle = title + " 可报名人数： " + remainNum
 
-        # 推送内容
-        # msgContent = "授课老师：" + teacher + "\n" + "总人数：" + nums + "\n" \
-        #              + "地点：" + location + "\n" + "报名时间:" + Astart + "-" + Aend + "\n" \
-        #              + "签到时间：" + Qstart + "-" + Qend
-        msgContent = "授课老师:{}\n总人数:{}\n地点:{}\n报名时间:{}-{}\n签到时间:{}-{}\n课程号={}".format(teacher, nums, location, Astart,
-                                                                                     Aend,
-                                                                                     Qstart, Qend, uniqueFlag)
-        messages.append({"msgTitle": msgTitle, "msgContent": msgContent})
+        if teacher == "杨炜成":
+            # 推送内容
+            msgContent = "授课老师:{}\n总人数:{}\n地点:{}\n报名时间:{}-{}\n签到时间:{}-{}".format(teacher, nums, location, Astart, Aend,
+                                                                                 Qstart, Qend)
+            messages.append({"msgTitle": msgTitle, "msgContent": msgContent})
     return messages
 
 
@@ -188,7 +185,7 @@ def removeRepeat(data):
 
 
 if __name__ == '__main__':
-    # 息知 发布订阅模式url（自行补充）
+    # 息知 发布订阅模式url
     urls = [""]
     auth()
     # 爬取数据
@@ -200,7 +197,7 @@ if __name__ == '__main__':
     if len(messages) > 0:
         for url in urls:
             for message in messages:
-                # requests.post(url, params={'title': message.get("msgTitle"), "content": message.get("msgContent")})
+                requests.post(url, params={'title': message.get("msgTitle"), "content": message.get("msgContent")})
                 time.sleep(1)
         logging.info("发送成功")
     else:
